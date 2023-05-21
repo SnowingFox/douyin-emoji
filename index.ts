@@ -6,14 +6,14 @@ const url = 'https://www.douyin.com/aweme/v1/web/emoji/list'
 
 const output = './emoji'
 
-async function downloadEmoji(emoji: EmojiList) {
+async function downloadEmoji(emoji: EmojiList, index: number) {
   const imgUrl = emoji.emoji_url.url_list[0]
   const imgResponse = await axios({
     url: imgUrl,
     responseType: 'stream'
   })
 
-  const outputDir = `${output}/${emoji.origin_uri}`
+  const outputDir = `${output}/${index}_${emoji.origin_uri}`
 
   imgResponse.data.pipe(fs.createWriteStream(outputDir))
 
@@ -28,7 +28,7 @@ async function run() {
   const response = await axios.get(url) as AxiosResponse<Response>
   const emojiList = response.data
 
-  const promises = emojiList.emoji_list.map((emoji, index) => downloadEmoji(emoji))
+  const promises = emojiList.emoji_list.map((emoji, index) => downloadEmoji(emoji, index))
 
   await Promise.all(promises)
 
