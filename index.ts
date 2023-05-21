@@ -12,8 +12,9 @@ async function downloadEmoji(emoji: EmojiList, index: number) {
     url: imgUrl,
     responseType: 'stream'
   })
+  const originName = `${index}_${emoji.display_name}_${emoji.origin_uri}`
 
-  const outputDir = `${output}/${index}_${emoji.origin_uri}`
+  const outputDir = `${output}/${originName}`
 
   imgResponse.data.pipe(fs.createWriteStream(outputDir))
 
